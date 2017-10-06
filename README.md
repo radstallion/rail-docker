@@ -26,7 +26,7 @@ This project is created to demonstrate how to use rails with Docker.
     ADD . /noteapp
     ```
 4. create docker-compose.yml
-    ```
+    ```yaml
     version: '2'
     services:
       db:
@@ -56,3 +56,33 @@ This project is created to demonstrate how to use rails with Docker.
           DB_PASSWORD: password
           DB_HOST: db
     ```
+5. run
+    ```bash
+    docker-compose run app rails new . --force -- database=mysql --skip-bundle
+    ```
+6. edit database.yml
+    ```Yaml
+    default: &default
+      adapter: mysql2
+      encoding: utf8
+      pool: 5
+      database: <%= ENV['DB_NAME'] %>
+      username: <%= ENV['DB_USER'] %>
+      password: <%= ENV['DB_PASSWORD'] %>
+      host: <%= ENV['DB_HOST'] %>
+
+    development:
+      <<: *default
+
+    test:
+      <<: *default
+
+    production:
+      <<: *default
+    ```
+7.  run
+    ```bash
+    docker-compose build
+    docker-compose up
+    ```
+## Enjoy!
